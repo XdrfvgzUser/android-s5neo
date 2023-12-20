@@ -23,25 +23,26 @@ jobs:
 
       - name: Setup and build
         run: |
-          mkdir lineage-19.1
+          mkdir -p lineage-19.1
           cd lineage-19.1
           repo init -u https://github.com/LineageOS/android.git -b lineage-19.1 --depth=1
-          #sudo chown 777 . -R
+          # sudo chown 777 . -R
           git clone --depth=1 https://github.com/K9100ii/s5neolte-manifest.git -b lineage-19.1 .repo/local_manifests
           repo sync --force-sync --no-tags --no-clone-bundle -c
-          #sudo chown 777 . -R
+          # sudo chown 777 . -R
           . build/envsetup.sh 
           lunch lineage_s5neolte-userdebug 
           mka otapackage
           
-#      - name: Create tar archive
-#        run: |
-#          mkdir -p geili
-#          tar -cf geili/file.tar lineage-19.1
+      - name: Create tar archive
+        run: |
+          mkdir -p los-tar
+          tar -cf los-tar/los.tar lineage-19.1
+          rm -r lineage-19.1
 
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
-          name: repo
-          path: lineage-19.1/*
+          name: los-19.1
+          path: los-tar/*
           if-no-files-found: error
